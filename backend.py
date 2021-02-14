@@ -37,6 +37,13 @@ def db_insert(mode,content,value):
 			return True
 		except:
 			return False
+	elif mode == 'informasi':
+		data={"Keterangan":str(value)}
+		try:
+			db.child("INFORMASI").child(str(content)).set(data)
+			return True
+		except:
+			return False
 
 
 def db_get(context,name):

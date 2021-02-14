@@ -17,6 +17,8 @@ def show_command(update, context):
 /nims                  - Menampilkan seluruh nim
 /nim (nama)     - Menampilkan nim 1 orang
 /tugas                  - Menampilkan seluruh tugas
+/kegiatan               - Menampilkan seluruh kegiatan
+/informasi              - Menampilkan seluruh informasi
 /wiki (topik)  - Mencari data di wikipedia
 /logo (nama) - Menampilkan Logo Kampus
 /translate (bahasa)|(text) - Menerjemahkan Text
@@ -144,6 +146,39 @@ def remove_event(update, context):
 		update.message.reply_text(f'Kegiatan "{task}" berhasil dihapus')
 	else:
 		update.message.reply_text(f'Kegiatan "{task}" gagal dihapus')
+
+""" BAGIAN INFORMASI """
+def add_info(update, context):
+	info = " ".join(context.args)
+	infos = info.split('|')
+	if len(infos) < 2:
+		update.message.reply_text(f'Format salah')
+		return
+	inserted = backend.db_insert('informasi',infos[0],infos[1])
+	if inserted:
+		update.message.reply_text(f'Informasi berhasil ditambahkan\n\nInformasi: {infos[0]}\nKeterangan: {infos[1]}')
+	else:
+		update.message.reply_text(f'Informasi gagal ditambahkan')
+
+
+def get_info(update, context):
+	result = backend.db_get('informasi','INFORMASI')
+	if str(result) != 'Null' or str(result) != 'None':
+		update.message.reply_text(f'DAFTAR INFORMASI\n\n{result}')
+	else:
+		update.message.reply_text(f'Tidak ada informasi')
+
+
+def remove_info(update, context):
+	task = " ".join(context.args)
+	if len(task) < 2:
+		update.message.reply_text(f'Format salah')
+		return
+	deleted = backend.db_remove_child('INFORMASI',task)
+	if deleted:
+		update.message.reply_text(f'Informasi "{task}" berhasil dihapus')
+	else:
+		update.message.reply_text(f'Informasi "{task}" gagal dihapus')
 
 
 """ PERHITUNGAN """
@@ -299,6 +334,10 @@ def command_list():
 	bot.dispatcher.add_handler(CommandHandler("kegiatan", get_event))
 	bot.dispatcher.add_handler(CommandHandler("tambah_kegiatan", add_event))
 	bot.dispatcher.add_handler(CommandHandler("hapus_kegiatan", remove_event))
+
+	bot.dispatcher.add_handler(CommandHandler("informasi", get_info))
+	bot.dispatcher.add_handler(CommandHandler("tambah_informasi", add_info))
+	bot.dispatcher.add_handler(CommandHandler("hapus_informasi", remove_info))
 
 	bot.dispatcher.add_handler(CommandHandler("hitung", math_sum))
 
