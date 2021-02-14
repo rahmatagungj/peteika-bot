@@ -3,6 +3,7 @@ from telegram import Update
 from telegram.ext import Updater, CommandHandler, CallbackContext
 import wikipedia
 from google_trans_new import google_translator
+import math
 
 bot = Updater(backend.token)
 
@@ -19,6 +20,9 @@ def show_command(update, context):
 /wiki (topik)  - Mencari data di wikipedia
 /logo (nama) - Menampilkan Logo Kampus
 /translate (bahasa)|(text) - Menerjemahkan Text
+/tan (nomor) - Mengubah bilangan ke Tan
+/cos (nomor) - Mengubah bilangan ke Cos
+/sin (nomor) - Mengubah bilangan ke Sin
 	'''
 	update.message.reply_text(command)
 
@@ -167,12 +171,50 @@ def to_translate(update, context):
 		translate_text = 'Data tidak dapat diproses'
 	update.message.reply_text(f'{translate_text}')
 
+""" MATEMATIKA """
+def make_sin(update, context):
+	find = " ".join(context.args)
+	if len(find) <= 0:
+		update.message.reply_text(f'Format salah')
+		return
+	if '.' in find or ',' in find:
+		result = math.sin(float(find))
+	else:
+		result = math.sin(int(find))
+	update.message.reply_text(f'Hasil: {result}')
+
+
+def make_cos(update, context):
+	find = " ".join(context.args)
+	if len(find) <= 0:
+		update.message.reply_text(f'Format salah')
+		return
+	if '.' in find or ',' in find:
+		result = math.cos(float(find))
+	else:
+		result = math.cos(int(find))
+	update.message.reply_text(f'Hasil: {result}')
+
+
+def make_tan(update, context):
+	find = " ".join(context.args)
+	if len(find) <= 0:
+		update.message.reply_text(f'Format salah')
+		return
+	if '.' in find or ',' in find:
+		result = math.tan(float(find))
+	else:
+		result = math.tan(int(find))
+	update.message.reply_text(f'Hasil: {result}')
+
+
 def command_list():
 	bot.dispatcher.add_handler(CommandHandler("start", start_callback))
 
 	bot.dispatcher.add_handler(CommandHandler("command", show_command))
 	bot.dispatcher.add_handler(CommandHandler("cmd", show_command))
 	bot.dispatcher.add_handler(CommandHandler("cmds", show_command))
+	bot.dispatcher.add_handler(CommandHandler("help", show_command))
 
 	bot.dispatcher.add_handler(CommandHandler("nims", get_nim))
 	bot.dispatcher.add_handler(CommandHandler("nim", get_one_nim))
@@ -192,6 +234,10 @@ def command_list():
 
 	bot.dispatcher.add_handler(CommandHandler("translate", to_translate))
 	bot.dispatcher.add_handler(CommandHandler("terjemahkan", to_translate))
+
+	bot.dispatcher.add_handler(CommandHandler("sin", make_sin))
+	bot.dispatcher.add_handler(CommandHandler("cos", make_cos))
+	bot.dispatcher.add_handler(CommandHandler("tan", make_tan))
 
 if __name__ == '__main__':
 	command_list()
