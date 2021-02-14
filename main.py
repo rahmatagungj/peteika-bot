@@ -16,9 +16,9 @@ def show_command(update, context):
 /nims                  - Menampilkan seluruh nim
 /nim (nama)     - Menampilkan nim 1 orang
 /tugas                  - Menampilkan seluruh tugas
-/tambah_tugas (matkul)|(tugas)    - Menambah tugas
 /wiki (topik)  - Mencari data di wikipedia
 /logo (nama) - Menampilkan Logo Kampus
+/translate (bahasa)|(text) - Menerjemahkan Text
 	'''
 	update.message.reply_text(command)
 
