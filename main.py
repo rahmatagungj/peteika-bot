@@ -1,6 +1,7 @@
 import backend as backend
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, CallbackContext
+import wikipedia
 
 bot = Updater(backend.token)
 
@@ -128,6 +129,19 @@ def math_sum(update, context):
 		result = int(esums[0])%int(esums[1])
 	update.message.reply_text(f'Hasil: {result}')
 
+""" WIKIPEDIA """
+def get_wiki(update, context):
+	esum = " ".join(context.args)
+	wikipedia.set_lang("id")
+	if len(esum) < 2:
+		update.message.reply_text(f'Format salah')
+		return
+	try:
+		result = wikipedia.summary(esum,sentences=2)
+	except:
+		result = "Data tidak ada"
+	update.message.reply_text(f'{result}')
+
 
 def command_list():
 	bot.dispatcher.add_handler(CommandHandler("start", start_callback))
@@ -146,6 +160,11 @@ def command_list():
 	bot.dispatcher.add_handler(CommandHandler("hapus_tugas", remove_task))
 
 	bot.dispatcher.add_handler(CommandHandler("hitung", math_sum))
+
+	bot.dispatcher.add_handler(CommandHandler("wikipedia", get_wiki))
+	bot.dispatcher.add_handler(CommandHandler("wiki", get_wiki))
+
+
 if __name__ == '__main__':
 	command_list()
 	bot.start_polling()

@@ -1,2 +1,3 @@
 pyrebase
 python-telegram-bot
+wikipedia
