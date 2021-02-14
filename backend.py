@@ -30,6 +30,13 @@ def db_insert(mode,content,value):
 			return True
 		except:
 			return False
+	elif mode == 'kegiatan':
+		data={"Waktu":str(value)}
+		try:
+			db.child("KEGIATAN").child(str(content)).set(data)
+			return True
+		except:
+			return False
 
 
 def db_get(context,name):

@@ -23,6 +23,8 @@ def show_command(update, context):
 /tan (nomor) - Mengubah bilangan ke Tan
 /cos (nomor) - Mengubah bilangan ke Cos
 /sin (nomor) - Mengubah bilangan ke Sin
+/pangkat (nomor)|(base) - Mengubah bilangan ke Pangkat
+/log (nomor) - Mengubah bilangan ke Log
 	'''
 	update.message.reply_text(command)
 
@@ -110,6 +112,40 @@ def remove_task(update, context):
 	else:
 		update.message.reply_text(f'Tugas "{task}" gagal dihapus')
 
+""" BAGIAN KEGIATAN """
+def add_event(update, context):
+	info = " ".join(context.args)
+	infos = info.split('|')
+	if len(infos) < 2:
+		update.message.reply_text(f'Format salah')
+		return
+	inserted = backend.db_insert('kegiatan',infos[0],infos[1])
+	if inserted:
+		update.message.reply_text(f'Kegiatan berhasil ditambahkan\n\nKegiatan: {infos[0]}\nWaktu: {infos[1]}')
+	else:
+		update.message.reply_text(f'Kegiatan gagal ditambahkan')
+
+
+def get_event(update, context):
+	result = backend.db_get('Kegiatan','KEGIATAN')
+	if str(result) != 'Null' or str(result) != 'None':
+		update.message.reply_text(f'DAFTAR KEGIATAN\n\n{result}')
+	else:
+		update.message.reply_text(f'Tidak ada kegiatan')
+
+
+def remove_event(update, context):
+	task = " ".join(context.args)
+	if len(task) < 2:
+		update.message.reply_text(f'Format salah')
+		return
+	deleted = backend.db_remove_child('KEGIATAN',task)
+	if deleted:
+		update.message.reply_text(f'Kegiatan "{task}" berhasil dihapus')
+	else:
+		update.message.reply_text(f'Kegiatan "{task}" gagal dihapus')
+
+
 """ PERHITUNGAN """
 def math_sum(update, context):
 	esum = " ".join(context.args)
@@ -133,6 +169,7 @@ def math_sum(update, context):
 		result = int(esums[0])%int(esums[1])
 	update.message.reply_text(f'Hasil: {result}')
 
+
 """ WIKIPEDIA """
 def get_wiki(update, context):
 	esum = " ".join(context.args)
@@ -146,6 +183,7 @@ def get_wiki(update, context):
 		result = "Data tidak ada"
 	update.message.reply_text(f'{result}')
 
+
 """ MEDIA """
 def get_logo(update, context):
 	find = " ".join(context.args)
@@ -156,6 +194,7 @@ def get_logo(update, context):
 		url = 'https://akupintar.id/documents/20143/0/Sekolah-Tinggi-Keguruan-dan-Ilmu-Pendidikan-Muhammadiyah-Kuningan.png'
 	chat_id = update.message.chat_id
 	context.bot.send_photo(chat_id=chat_id, photo=url)
+
 
 """ TRANSLATE """
 def to_translate(update, context):
@@ -170,6 +209,7 @@ def to_translate(update, context):
 	except:
 		translate_text = 'Data tidak dapat diproses'
 	update.message.reply_text(f'{translate_text}')
+
 
 """ MATEMATIKA """
 def make_sin(update, context):
@@ -255,6 +295,10 @@ def command_list():
 	bot.dispatcher.add_handler(CommandHandler("tugas", get_task))
 	bot.dispatcher.add_handler(CommandHandler("tambah_tugas", add_task))
 	bot.dispatcher.add_handler(CommandHandler("hapus_tugas", remove_task))
+
+	bot.dispatcher.add_handler(CommandHandler("kegiatan", get_event))
+	bot.dispatcher.add_handler(CommandHandler("tambah_kegiatan", add_event))
+	bot.dispatcher.add_handler(CommandHandler("hapus_kegiatan", remove_event))
 
 	bot.dispatcher.add_handler(CommandHandler("hitung", math_sum))
 
