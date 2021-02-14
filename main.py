@@ -2,6 +2,7 @@ import backend as backend
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, CallbackContext
 import wikipedia
+from google_trans_new import google_translator
 
 bot = Updater(backend.token)
 
@@ -17,7 +18,7 @@ def show_command(update, context):
 /tugas                  - Menampilkan seluruh tugas
 /tambah_tugas (matkul)|(tugas)    - Menambah tugas
 /wiki (topik)  - Mencari data di wikipedia
-/logo - Menampilkan Logo Kampus
+/logo (nama) - Menampilkan Logo Kampus
 	'''
 	update.message.reply_text(command)
 
@@ -152,6 +153,20 @@ def get_logo(update, context):
 	chat_id = update.message.chat_id
 	context.bot.send_photo(chat_id=chat_id, photo=url)
 
+""" TRANSLATE """
+def to_translate(update, context):
+	find = " ".join(context.args)
+	if len(find) <= 0:
+		update.message.reply_text(f'Format salah')
+		return
+	text = find.split('|')
+	translator = google_translator()
+	try:
+		translate_text = translator.translate(text[1],lang_tgt=text[0])  
+	except:
+		translate_text = 'Data tidak dapat diproses'
+	update.message.reply_text(f'{translate_text}')
+
 def command_list():
 	bot.dispatcher.add_handler(CommandHandler("start", start_callback))
 
@@ -174,6 +189,9 @@ def command_list():
 	bot.dispatcher.add_handler(CommandHandler("wiki", get_wiki))
 
 	bot.dispatcher.add_handler(CommandHandler("logo", get_logo))
+
+	bot.dispatcher.add_handler(CommandHandler("translate", to_translate))
+	bot.dispatcher.add_handler(CommandHandler("terjemahkan", to_translate))
 
 if __name__ == '__main__':
 	command_list()
