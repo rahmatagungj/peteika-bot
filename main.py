@@ -15,6 +15,9 @@ def show_command(update, context):
 /nim (nama)     - Menampilkan nim 1 orang
 /tambah_nim (nama)|(nim)    - Menambah nim
 /hapus_nim (nama)  - Menghapus nim
+/tugas                  - Menampilkan seluruh tugas
+/tambah_tugas (matkul)|(tugas)    - Menambah tugas
+/hapus_tugas (matkul)  - Menghapus tugas
 	'''
 	update.message.reply_text(command)
 
