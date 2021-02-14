@@ -96,10 +96,10 @@ def get_task(update, context):
 
 def remove_task(update, context):
 	task = " ".join(context.args)
-	deleted = backend.db_remove_child('TUGAS',task)
 	if len(task) < 2:
 		update.message.reply_text(f'Format salah')
 		return
+	deleted = backend.db_remove_child('TUGAS',task)
 	if deleted:
 		update.message.reply_text(f'Tugas "{task}" berhasil dihapus')
 	else:
