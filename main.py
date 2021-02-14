@@ -105,6 +105,29 @@ def remove_task(update, context):
 	else:
 		update.message.reply_text(f'Tugas "{task}" gagal dihapus')
 
+""" PERHITUNGAN """
+def math_sum(update, context):
+	esum = " ".join(context.args)
+	if len(esum) < 2:
+		update.message.reply_text(f'Format salah')
+		return
+	if '*' in esum:
+		esums = esum.split('*')
+		result = int(esums[0])*int(esums[1])
+	elif '+' in esum:
+		esums = esum.split('+')
+		result = int(esums[0])+int(esums[1])
+	elif '/' in esum:
+		esums = esum.split('/')
+		result = int(esums[0])/int(esums[1])
+	elif '-' in esum:
+		esums = esum.split('-')
+		result = int(esums[0])-int(esums[1])
+	elif '%' in esum:
+		esums = esum.split('%')
+		result = int(esums[0])%int(esums[1])
+	update.message.reply_text(f'Hasil: {result}')
+
 
 def command_list():
 	bot.dispatcher.add_handler(CommandHandler("start", start_callback))
@@ -122,6 +145,7 @@ def command_list():
 	bot.dispatcher.add_handler(CommandHandler("tambah_tugas", add_task))
 	bot.dispatcher.add_handler(CommandHandler("hapus_tugas", remove_task))
 
+	bot.dispatcher.add_handler(CommandHandler("hitung", math_sum))
 if __name__ == '__main__':
 	command_list()
 	bot.start_polling()
