@@ -178,9 +178,10 @@ def make_sin(update, context):
 		update.message.reply_text(f'Format salah')
 		return
 	if '.' in find or ',' in find:
+		find = find.replace(',','').replace('.','')
 		result = math.sin(float(find))
 	else:
-		result = math.sin(int(find))
+		result = int(math.sin(int(find)))
 	update.message.reply_text(f'Hasil: {result}')
 
 
@@ -190,9 +191,10 @@ def make_cos(update, context):
 		update.message.reply_text(f'Format salah')
 		return
 	if '.' in find or ',' in find:
+		find = find.replace(',','').replace('.','')
 		result = math.cos(float(find))
 	else:
-		result = math.cos(int(find))
+		result = int(math.cos(int(find)))
 	update.message.reply_text(f'Hasil: {result}')
 
 
@@ -202,9 +204,38 @@ def make_tan(update, context):
 		update.message.reply_text(f'Format salah')
 		return
 	if '.' in find or ',' in find:
+		find = find.replace(',','').replace('.','')
 		result = math.tan(float(find))
 	else:
-		result = math.tan(int(find))
+		result = int(math.tan(int(find)))
+	update.message.reply_text(f'Hasil: {result}')
+
+
+def make_log(update, context):
+	find = " ".join(context.args)
+	if len(find) <= 0:
+		update.message.reply_text(f'Format salah')
+		return
+	if '.' in find or ',' in find:
+		find = find.replace(',','').replace('.','')
+		result = math.log(float(find))
+	else:
+		result = int(math.log(int(find)))
+	update.message.reply_text(f'Hasil: {result}')
+
+
+def make_pow(update, context):
+	find = " ".join(context.args)
+	if len(find) <= 0:
+		update.message.reply_text(f'Format salah')
+		return
+	if '.' in find or ',' in find:
+		find = find.replace(',','').replace('.','')
+		find = find.split('|')
+		result = math.pow(float(find[0]),float(find[1]))
+	else:
+		find = find.split('|')
+		result = int(math.pow(int(find[0]),int(find[1])))
 	update.message.reply_text(f'Hasil: {result}')
 
 
@@ -238,6 +269,8 @@ def command_list():
 	bot.dispatcher.add_handler(CommandHandler("sin", make_sin))
 	bot.dispatcher.add_handler(CommandHandler("cos", make_cos))
 	bot.dispatcher.add_handler(CommandHandler("tan", make_tan))
+	bot.dispatcher.add_handler(CommandHandler("log", make_log))
+	bot.dispatcher.add_handler(CommandHandler("pangkat", make_pow))
 
 if __name__ == '__main__':
 	command_list()
