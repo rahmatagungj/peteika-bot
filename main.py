@@ -14,11 +14,10 @@ def show_command(update, context):
 
 /nims                  - Menampilkan seluruh nim
 /nim (nama)     - Menampilkan nim 1 orang
-/tambah_nim (nama)|(nim)    - Menambah nim
-/hapus_nim (nama)  - Menghapus nim
 /tugas                  - Menampilkan seluruh tugas
 /tambah_tugas (matkul)|(tugas)    - Menambah tugas
-/hapus_tugas (matkul)  - Menghapus tugas
+/wiki (topik)  - Mencari data di wikipedia
+/logo - Menampilkan Logo Kampus
 	'''
 	update.message.reply_text(command)
 
@@ -142,6 +141,16 @@ def get_wiki(update, context):
 		result = "Data tidak ada"
 	update.message.reply_text(f'{result}')
 
+""" MEDIA """
+def get_logo(update, context):
+	find = " ".join(context.args)
+	if len(find) <= 0:
+		update.message.reply_text(f'Format salah')
+		return
+	if find == 'kampus':
+		url = 'https://akupintar.id/documents/20143/0/Sekolah-Tinggi-Keguruan-dan-Ilmu-Pendidikan-Muhammadiyah-Kuningan.png'
+	chat_id = update.message.chat_id
+	context.bot.send_photo(chat_id=chat_id, photo=url)
 
 def command_list():
 	bot.dispatcher.add_handler(CommandHandler("start", start_callback))
@@ -164,10 +173,9 @@ def command_list():
 	bot.dispatcher.add_handler(CommandHandler("wikipedia", get_wiki))
 	bot.dispatcher.add_handler(CommandHandler("wiki", get_wiki))
 
+	bot.dispatcher.add_handler(CommandHandler("logo", get_logo))
 
 if __name__ == '__main__':
 	command_list()
 	bot.start_polling()
 	bot.idle()
-
-
