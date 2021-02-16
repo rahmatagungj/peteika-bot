@@ -3,7 +3,7 @@ from telegram import Update
 from telegram.ext import Updater, CommandHandler, CallbackContext
 import wikipedia
 from google_trans_new import google_translator
-import math
+import math,socket
 
 bot = Updater(backend.token)
 
@@ -313,6 +313,18 @@ def make_pow(update, context):
 		result = int(math.pow(int(find[0]),int(find[1])))
 	update.message.reply_text(f'Hasil: {result}')
 
+""" BAGIAN LAINNYA """
+def get_ip(update, context):
+	find = " ".join(context.args)
+	if len(find) <= 0:
+		update.message.reply_text(f'Format salah')
+		return
+	try: 
+		host_ip = socket.gethostbyname(find) 
+		result = "IP : {}".format(host_ip)
+	except: 
+		result = "Unable to get IP {}".format(find)
+	update.message.reply_text(result)
 
 def command_list():
 	bot.dispatcher.add_handler(CommandHandler("start", start_callback))
@@ -354,6 +366,9 @@ def command_list():
 	bot.dispatcher.add_handler(CommandHandler("tan", make_tan))
 	bot.dispatcher.add_handler(CommandHandler("log", make_log))
 	bot.dispatcher.add_handler(CommandHandler("pangkat", make_pow))
+
+	bot.dispatcher.add_handler(CommandHandler("ip", get_ip))
+
 
 if __name__ == '__main__':
 	command_list()
