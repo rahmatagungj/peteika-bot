@@ -326,6 +326,28 @@ def get_ip(update, context):
 		result = "Unable to get IP {}".format(find)
 	update.message.reply_text(result)
 
+def get_ip_type(update, context):
+	IP = " ".join(context.args)
+	if len(IP) <= 0:
+		update.message.reply_text(f'Format salah')
+		return
+	def isIPv4(s):
+		try: return str(int(s)) == s and 0 <= int(s) <= 255
+		except: return False
+	def isIPv6(s):
+		if len(s) > 4:
+			return False
+		try : return int(s, 16) >= 0 and s[0] != '-'
+		except:
+			return False
+	if IP.count(".") == 3 and all(isIPv4(i) for i in IP.split(".")):
+		update.message.reply_text("Tipe IP {} adalah IPv4".format(IP))
+		return
+	if IP.count(":") == 7 and all(isIPv6(i) for i in IP.split(":")):
+		update.message.reply_text("Tipe IP {} adalah IPv6".format(IP))
+		return
+	update.message.reply_text("Tipe IP {} adalah Neither".format(IP))
+
 def command_list():
 	bot.dispatcher.add_handler(CommandHandler("start", start_callback))
 
@@ -368,6 +390,7 @@ def command_list():
 	bot.dispatcher.add_handler(CommandHandler("pangkat", make_pow))
 
 	bot.dispatcher.add_handler(CommandHandler("ip", get_ip))
+	bot.dispatcher.add_handler(CommandHandler("tipe_ip", get_ip_type))
 
 
 if __name__ == '__main__':
