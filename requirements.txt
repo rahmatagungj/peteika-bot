@@ -3,3 +3,4 @@ python-telegram-bot
 wikipedia
 google_trans_new
 urllib3
+requests
