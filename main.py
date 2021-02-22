@@ -33,7 +33,7 @@ def show_command(update, context):
 /sin (nomor) - Mengubah bilangan ke Sin
 /pangkat (nomor)|(base) - Mengubah bilangan ke Pangkat
 /log (nomor) - Mengubah bilangan ke Log
-    """
+	"""
     update.message.reply_text(command)
 
 
@@ -379,7 +379,7 @@ def get_kbbi(update, context):
         update.message.reply_text(f"Format salah")
         return
     try:
-        r = requests.get(f'https://kbbi-api-zhirrr.vercel.app/api/kbbi?text={find}')
+        r = requests.get(f"https://kbbi-api-zhirrr.vercel.app/api/kbbi?text={find}")
         r = r.json()
         frasa = r["lema"]
         arti = r["arti"]
@@ -387,6 +387,32 @@ def get_kbbi(update, context):
 
 Frasa : {frasa}
 Arti: {arti}"""
+    except:
+        result = "Data error"
+    update.message.reply_text(result)
+
+
+def get_pos(update, context):
+    find = " ".join(context.args)
+    if len(find) <= 0:
+        update.message.reply_text(f"Format salah")
+        return
+    try:
+        r = requests.get(f"https://kodepos.herokuapp.com/search?q={find}")
+        r = r.json()
+        for i in r["data"]:
+            provinsi = i["province"]
+            kabupaten = i["city"]
+            kecamatan = i["subdistrict"]
+            desa = i["urban"]
+            kodepos = i["postalcode"]
+        result = f"""Hasil {find}
+	
+Provinsi : {provinsi}
+Kabupaten : {kabupaten}
+Kecamatan : {kecamatan}
+Desa : {desa}
+kode pos : {kodepos}"""
     except:
         result = "Data error"
     update.message.reply_text(result)
@@ -480,6 +506,7 @@ def command_list():
     bot.dispatcher.add_handler(CommandHandler("covid", get_covid))
     bot.dispatcher.add_handler(CommandHandler("corona", get_covid))
     bot.dispatcher.add_handler(CommandHandler("kbbi", get_kbbi))
+    bot.dispatcher.add_handler(CommandHandler("kodepos", get_pos))
 
 
 if __name__ == "__main__":
