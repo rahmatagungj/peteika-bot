@@ -6,6 +6,7 @@ from google_trans_new import google_translator
 import math
 import socket
 import requests
+import random
 
 bot = Updater(backend.token)
 
@@ -491,6 +492,71 @@ Waktu : {time}
     context.bot.send_photo(chat_id=chat_id, photo=thumb)
 
 
+def get_wallpaper_cyber(update, context):
+    try:
+        r = requests.get("https://wallpaper-api-zhirrr.vercel.app/api/cyberspace")
+        r = r.json()
+        choice = random.randint(0, len(r["results"]))
+        url = r["results"][choice]
+        chat_id = update.message.chat_id
+        context.bot.send_photo(chat_id=chat_id, photo=url)
+    except:
+        result = "Data error"
+        update.message.reply_text(result)
+
+
+def get_wallpaper_gunung(update, context):
+    try:
+        r = requests.get("https://wallpaper-api-zhirrr.vercel.app/api/mountain")
+        r = r.json()
+        choice = random.randint(0, len(r["results"]))
+        url = r["results"][choice]
+        chat_id = update.message.chat_id
+        context.bot.send_photo(chat_id=chat_id, photo=url)
+    except:
+        result = "Data error"
+        update.message.reply_text(result)
+
+
+def get_wallpaper_muslim(update, context):
+    try:
+        r = requests.get("https://wallpaper-api-zhirrr.vercel.app/api/islamic")
+        r = r.json()
+        choice = random.randint(0, len(r["results"]))
+        url = r["results"][choice]
+        chat_id = update.message.chat_id
+        context.bot.send_photo(chat_id=chat_id, photo=url)
+    except:
+        result = "Data error"
+        update.message.reply_text(result)
+
+
+def get_wallpaper_programming(update, context):
+    try:
+        r = requests.get("https://wallpaper-api-zhirrr.vercel.app/api/programming")
+        r = r.json()
+        choice = random.randint(0, len(r["results"]))
+        url = r["results"][choice]
+        chat_id = update.message.chat_id
+        context.bot.send_photo(chat_id=chat_id, photo=url)
+    except:
+        result = "Data error"
+        update.message.reply_text(result)
+
+
+def get_wallpaper_teknologi(update, context):
+    try:
+        r = requests.get("https://wallpaper-api-zhirrr.vercel.app/api/technology")
+        r = r.json()
+        choice = random.randint(0, len(r["results"]))
+        url = r["results"][choice]
+        chat_id = update.message.chat_id
+        context.bot.send_photo(chat_id=chat_id, photo=url)
+    except:
+        result = "Data error"
+        update.message.reply_text(result)
+
+
 def get_ip(update, context):
     find = " ".join(context.args)
     if len(find) <= 0:
@@ -583,6 +649,14 @@ def command_list():
     bot.dispatcher.add_handler(CommandHandler("info_gempa", get_gempa))
     bot.dispatcher.add_handler(CommandHandler("berita_teknologi", get_teknologi))
     bot.dispatcher.add_handler(CommandHandler("berita_games", get_games))
+
+    bot.dispatcher.add_handler(CommandHandler("wp_muslim", get_wallpaper_muslim))
+    bot.dispatcher.add_handler(CommandHandler("wp_teknologi", get_wallpaper_teknologi))
+    bot.dispatcher.add_handler(
+        CommandHandler("wp_programming", get_wallpaper_programming)
+    )
+    bot.dispatcher.add_handler(CommandHandler("wp_gunung", get_wallpaper_gunung))
+    bot.dispatcher.add_handler(CommandHandler("wp_cyber", get_wallpaper_cyber))
 
 
 if __name__ == "__main__":
