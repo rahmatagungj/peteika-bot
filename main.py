@@ -443,6 +443,54 @@ Map : {maps}"""
     update.message.reply_text(result)
 
 
+def get_teknologi(update, context):
+    try:
+        r = requests.get("https://the-lazy-media-api.vercel.app/api/tech?page=1")
+        r = r.json()
+        for i in r["result"]:
+            title = i["title"]
+            thumb = i["thumb"]
+            time = i["time"]
+            isi = i["desc"]
+            isi = isi.replace("\\xa0", " ")
+            break
+        result = f"""BERITA TEKNOLOGI TERBARU
+
+Judul : {title}
+Waktu : {time}
+
+{isi}"""
+    except:
+        result = "Data error"
+    update.message.reply_text(result)
+    chat_id = update.message.chat_id
+    context.bot.send_photo(chat_id=chat_id, photo=thumb)
+
+
+def get_games(update, context):
+    try:
+        r = requests.get("https://the-lazy-media-api.vercel.app/api/games?page=1")
+        r = r.json()
+        for i in r["result"]:
+            title = i["title"]
+            thumb = i["thumb"]
+            time = i["time"]
+            isi = i["desc"]
+            isi = isi.replace("\\xa0", " ")
+            break
+        result = f"""BERITA GAMES TERBARU
+
+Judul : {title}
+Waktu : {time}
+
+{isi}"""
+    except:
+        result = "Data error"
+    update.message.reply_text(result)
+    chat_id = update.message.chat_id
+    context.bot.send_photo(chat_id=chat_id, photo=thumb)
+
+
 def get_ip(update, context):
     find = " ".join(context.args)
     if len(find) <= 0:
@@ -533,6 +581,8 @@ def command_list():
     bot.dispatcher.add_handler(CommandHandler("kbbi", get_kbbi))
     bot.dispatcher.add_handler(CommandHandler("kodepos", get_pos))
     bot.dispatcher.add_handler(CommandHandler("info_gempa", get_gempa))
+    bot.dispatcher.add_handler(CommandHandler("berita_teknologi", get_teknologi))
+    bot.dispatcher.add_handler(CommandHandler("berita_games", get_games))
 
 
 if __name__ == "__main__":
