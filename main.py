@@ -418,6 +418,31 @@ kode pos : {kodepos}"""
     update.message.reply_text(result)
 
 
+def get_gempa(update, context):
+    try:
+        r = requests.get("https://gempa-api-zhirrr.vercel.app/api/gempa")
+        r = r.json()
+        waktu = r["Waktu"]
+        lintang = r["Lintang"]
+        bujur = r["Bujur"]
+        magnitudo = r["Magnitudo"]
+        kedalaman = r["Kedalaman"]
+        wilayah = r["Wilayah"]
+        maps = r["Map"]
+        result = f"""INFORMASI GEMPA TERBARU
+	
+Waktu : {waktu}
+lintang : {lintang}
+Bujur : {bujur}
+Magnitudo : {magnitudo}
+Kedalaman : {kedalaman}
+Wilayah : {wilayah}
+Map : {maps}"""
+    except:
+        result = "Data error"
+    update.message.reply_text(result)
+
+
 def get_ip(update, context):
     find = " ".join(context.args)
     if len(find) <= 0:
@@ -507,6 +532,7 @@ def command_list():
     bot.dispatcher.add_handler(CommandHandler("corona", get_covid))
     bot.dispatcher.add_handler(CommandHandler("kbbi", get_kbbi))
     bot.dispatcher.add_handler(CommandHandler("kodepos", get_pos))
+    bot.dispatcher.add_handler(CommandHandler("info_gempa", get_gempa))
 
 
 if __name__ == "__main__":
